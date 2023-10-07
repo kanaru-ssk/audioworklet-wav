@@ -45,7 +45,10 @@ function stopRecording(stream) {
   source.disconnect();
   worklet.disconnect();
 
-  const url = exportWAV();
+  const wavRawData = [getWAVHeader(), ...chunks];
+  const blob = new Blob(wavRawData, { type: "audio/wav" });
+  const url = URL.createObjectURL(blob);
+  chunks.splice(0);
 
   const fileName = `${new Date().toLocaleTimeString()}.wav`;
   const link = document.createElement("a");
@@ -61,16 +64,6 @@ function stopRecording(stream) {
 
   record.innerText = "Record";
   record.style.background = "";
-}
-
-// wavファイル作成
-function exportWAV() {
-  const wavRawData = [getWAVHeader(), ...chunks];
-  const blob = new Blob(wavRawData, { type: "audio/wav" });
-  const url = URL.createObjectURL(blob);
-  chunks.splice(0);
-
-  return url;
 }
 
 // wavファイルのヘッダーデータ作成
