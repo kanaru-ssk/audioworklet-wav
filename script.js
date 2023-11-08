@@ -1,4 +1,4 @@
-const record = document.getElementById("record");
+const record = document.querySelector("button");
 const chunks = [];
 let localStream;
 let context;
@@ -7,17 +7,16 @@ let worklet;
 
 record.onclick = () => {
   if (record.innerText === "Record") {
-    // マイクの許可を取得してから録音スタート
+    // get permission and start recording
     navigator.mediaDevices
       .getUserMedia({ audio: true, video: false })
       .then(startRecording);
   } else {
-    // 録音停止
+    // stop recording
     stopRecording(localStream);
   }
 };
 
-// 録音スタート
 async function startRecording(stream) {
   localStream = stream;
   context = new AudioContext();
@@ -39,7 +38,6 @@ async function startRecording(stream) {
   record.style.background = "red";
 }
 
-// 録音停止
 function stopRecording(stream) {
   stream.getTracks().forEach((track) => track.stop());
   source.disconnect();
@@ -59,14 +57,13 @@ function stopRecording(stream) {
   const li = document.createElement("li");
   li.appendChild(link);
 
-  const fileList = document.getElementById("fileList");
+  const fileList = document.querySelector("ul");
   fileList.appendChild(li);
 
   record.innerText = "Record";
   record.style.background = "";
 }
 
-// wavファイルのヘッダーデータ作成
 function getWAVHeader() {
   const BYTES_PER_SAMPLE = Int16Array.BYTES_PER_ELEMENT;
   const channel = 1;
