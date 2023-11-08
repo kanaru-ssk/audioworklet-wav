@@ -17,7 +17,7 @@ record.onclick = () => {
   }
 };
 
-const startRecording = async (stream) => {
+async function startRecording(stream) {
   localStream = stream;
   context = new AudioContext();
   source = context.createMediaStreamSource(stream);
@@ -36,9 +36,9 @@ const startRecording = async (stream) => {
 
   record.innerText = "Stop";
   record.style.background = "red";
-};
+}
 
-const stopRecording = (stream) => {
+function stopRecording(stream) {
   stream.getTracks().forEach((track) => track.stop());
   source.disconnect();
   worklet.disconnect();
@@ -62,9 +62,9 @@ const stopRecording = (stream) => {
 
   record.innerText = "Record";
   record.style.background = "";
-};
+}
 
-const getWAVHeader = () => {
+function getWAVHeader() {
   const BYTES_PER_SAMPLE = Int16Array.BYTES_PER_ELEMENT;
   const channel = 1;
   const sampleRate = context.sampleRate;
@@ -87,10 +87,10 @@ const getWAVHeader = () => {
   view.setUint32(40, dataLength, true); // data chunk length
 
   return header;
-};
+}
 
-const writeString = (dataView, offset, string) => {
+function writeString(dataView, offset, string) {
   for (let i = 0; i < string.length; i++) {
     dataView.setUint8(offset + i, string.charCodeAt(i));
   }
-};
+}
